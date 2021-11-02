@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <ul>
+    <a href="{% url 'home' %}" class="nav-button">Return to overview</a>
+  </ul>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file">
+    <button type="submit">Upload CSV file</button>
+  </form>
+
+  {% if message %}
+    <h3>{{ message }}</h3>
+  {% endif %}
+
+  {% if error %}
+    <h3>{{ error }}</h3>
+  {% endif %}
+
+{% endblock %}
+

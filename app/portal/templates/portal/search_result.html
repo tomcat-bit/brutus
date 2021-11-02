@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<ul>
+	<a href="{% url 'home' %}" class="nav-button">Return to overview</a>
+</ul>
+
+{% if result %}
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Sequence number</th>
+			<th>First name</th>
+			<th>Last Name</th>
+			<th>Age</th>
+			<th>Street</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Latitude</th>
+			<th>Longitude</th>
+			<th>CC Number</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{{ result.seq }}</td>
+			<td>{{ result.first_name }}</td>
+			<td>{{ result.last_name }}</td>
+			<td>{{ result.age }}</td>
+			<td>{{ result.street }}</td>
+			<td>{{ result.city }}</td>
+			<td>{{ result.state }}</td>
+			<td>{{ result.latitude }}</td>
+			<td>{{ result.longitude }}</td>
+			<td>{{ result.ccnumber }}</td>
+		</tr>
+	</tbody>
+</table>
+{% endif %}
+
+{% if error %}
+<h3>{{ error }}</h3>
+{% endif %}
+
+{% endblock %}

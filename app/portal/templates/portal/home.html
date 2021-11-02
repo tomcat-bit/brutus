@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+  <a href="{% url 'upload' %}" class="nav-button">Upload CSV file</a>
+</ul>
+
+<ul>
+  Number of indexed records: {{ num_records }}
+</ul>
+
+<ul>
+  <form action="{% url 'search_result' %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="seq" placeholder="Sequence number...">
+    <input type="submit" name="name" value="Search">
+  </form>
+</ul>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Sequence number</th>
+      <th>First name</th>
+      <th>Last Name</th>
+      <th>Age</th>
+      <th>Street</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>CC Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in records %}
+    <tr>
+      <td>{{ r.seq }}</td>
+      <td>{{ r.first_name }}</td>
+      <td>{{ r.last_name }}</td>
+      <td>{{ r.age }}</td>
+      <td>{{ r.street }}</td>
+      <td>{{ r.city }}</td>
+      <td>{{ r.state }}</td>
+      <td>{{ r.latitude }}</td>
+      <td>{{ r.longitude }}</td>
+      <td>{{ r.ccnumber }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!--Pagination-->
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if records.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ records.previous_page_number }}">Previous</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+    {% endif %}
+
+    {% if records.number|add:'-4' > 1 %}
+    <li class="page-item"><a class="page-link" href="?page={{ records.number|add:'-5' }}">&hellip;</a></li>
+    {% endif %}
+
+    {% for i in records.paginator.page_range %}
+    {% if records.number == i %}
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">
+        {{ i }}
+        <span class="sr-only">(current)</span>
+      </span>
+    </li>
+    {% elif i > records.number|add:'-5' and i < records.number|add:'5' %} <li class="page-item"><a class="page-link"
+        href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+      {% endfor %}
+
+      {% if records.paginator.num_pages > records.number|add:'4' %}
+      <li class="page-item"><a class="page-link" href="?page={{ records.number|add:'5' }}">&hellip;</a></li>
+      {% endif %}
+
+      {% if records.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ records.next_page_number }}">Next</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+      </li>
+      {% endif %}
+  </ul>
+</nav>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+{% endblock %}
